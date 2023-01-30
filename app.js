@@ -8,7 +8,7 @@ const port = 80;
 const fs = require('fs');
 
 const IP_API = 'http://ip-api.com/json/';
-const [,,UNSANITIZED_LOGS] = process.argv
+const [,,UNSANITIZED_LOGS] = process.argv // get file path for ip visits log
 
 const saveIpInfo = async (req) => {
   const ipInfoRes = await axios(`${IP_API}${req.headers['x-forwarded-for']}`);
@@ -21,7 +21,7 @@ const saveIpInfo = async (req) => {
   
   const infoText = `${headers}\n\n${ipInfo}\n\n- ${timestamp}\n\n`
 
-  fs.appendFile(UNSANITIZED_LOGS, infoText, console.error);
+  fs.appendFile((UNSANITIZED_LOGS || "./ip-info-visits.log"), infoText, console.error);
 }
 
 app.use(express.static("/"));
